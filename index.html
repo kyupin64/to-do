@@ -20,7 +20,7 @@
             </div>
         </nav>
 
-        <div class="flex h-5/6">
+        <div class="flex h-dvh">
 
             <!-- left list of lists -->
             <div class="bg-slate-200 w-1/3 p-2 flex flex-col gap-4">
@@ -31,17 +31,9 @@
 
             <!-- current list -->
             <div class="bg-slate-50 w-3/4 p-2 flex flex-col gap-3">
-                <h1 class="text-3xl border-b-2">Schoolwork</h1>
+                <h1 id="current-list-name" class="text-3xl border-b-2"></h1>
                 <button class="text-2xl border-2 border-slate-500 w-1/5 pb-1">+</button>
-                <div id="list" class="*:*:inline">
-                    <div>
-                        <i class="fa-regular fa-square"></i>
-                        <p>Work on to-do project</p>
-                    </div>
-                    <div>
-                        <i class="fa-regular fa-square"></i>
-                        <p>Study iterators</p>
-                    </div>
+                <div id="current-list-items" class="*:flex *:items-center *:gap-2 *:*:inline">
                 </div>
             </div>
         </div>

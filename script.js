@@ -35,6 +35,15 @@ function render() {
     });
     
     document.getElementById("list-group").innerHTML = listsHtml;
+
+    document.getElementById("current-list-name").innerHTML = currentList.name;
+
+    let todosHtml = "";
+    currentList.todos.forEach(item => {
+        todosHtml += `<div class="current-list-item"><button><i class="fa-regular fa-square"></i></button><p>${item.text}</p></div>`
+    });
+
+    document.getElementById("current-list-items").innerHTML = todosHtml
 }
 
 render();
