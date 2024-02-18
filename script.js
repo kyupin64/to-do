@@ -26,6 +26,9 @@ let lists = {
     }
 };
 let currentList = lists[1];
+console.log(currentList);
+
+document.getElementById("list-name-input").value = "";
 
 function render() {
     let listsHtml = "";
@@ -43,7 +46,22 @@ function render() {
         todosHtml += `<div class="current-list-item"><button><i class="fa-regular fa-square"></i></button><p>${item.text}</p></div>`
     });
 
-    document.getElementById("current-list-items").innerHTML = todosHtml
-}
+    document.getElementById("current-list-items").innerHTML = todosHtml;
+};
+
+function addList() { 
+    let inputListName = document.getElementById("list-name-input").value;
+    let newKey = Object.keys(lists).length + 1;
+
+    if (inputListName) {
+        lists[newKey] = {
+            name: `${inputListName}`,
+            todos: []
+        };
+    };
+    render();
+};
 
 render();
+
+document.getElementById("list-submit").addEventListener("click", addList);
