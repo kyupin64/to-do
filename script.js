@@ -25,8 +25,8 @@ let lists = {
         ]
     }
 };
-let currentList = lists[1];
-console.log(currentList);
+let currentList = 1;
+console.log(lists[currentList]);
 
 document.getElementById("list-name-input").value = "";
 
@@ -39,10 +39,10 @@ function render() {
     
     document.getElementById("list-group").innerHTML = listsHtml;
 
-    document.getElementById("current-list-name").innerHTML = currentList.name;
+    document.getElementById("current-list-name").innerHTML = lists[currentList].name;
 
     let todosHtml = "";
-    currentList.todos.forEach(item => {
+    lists[currentList].todos.forEach(item => {
         todosHtml += `<div class="current-list-item"><button><i class="fa-regular fa-square"></i></button><p>${item.text}</p></div>`
     });
 
@@ -62,6 +62,21 @@ function addList() {
     render();
 };
 
-render();
+function deleteList() {
+    if (Object.keys(lists).length > 1) {
+        delete lists[currentList];
+        currentList = Number(Object.keys(lists)[0]);
+        render();
+    } else {
+        delete lists[currentList];
+        document.getElementById("list-group").innerHTML = "";
+        document.getElementById("current-list-name").innerHTML = "";
+        document.getElementById("current-list-items").innerHTML = "";
+    }
+    
+}
+
+window.addEventListener("load", render);
 
 document.getElementById("list-submit").addEventListener("click", addList);
+document.getElementById("delete-button").addEventListener("click", deleteList);
