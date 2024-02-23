@@ -55,6 +55,9 @@ function render() {
     
     let listButtons = document.querySelectorAll(".list-group-item");
     listButtons.forEach((button) => button.addEventListener("click", switchLists));
+
+    let itemButtons = document.querySelectorAll(".current-list-item button");
+    itemButtons.forEach((button) => button.addEventListener("click", checkItem));
 };
 
 function addList() { 
@@ -125,6 +128,16 @@ function addItem() {
         toggleItemInput();
         render();
     };
+};
+
+function checkItem(e) {
+    let currentButton = e.currentTarget;
+    let icon = currentButton.querySelector("i");
+    let text = currentButton.nextElementSibling;
+    
+    icon.classList.toggle("fa-square");
+    icon.classList.toggle("fa-square-check");
+    text.classList.toggle("line-through");
 };
 
 window.addEventListener("load", render);
