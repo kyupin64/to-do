@@ -28,6 +28,10 @@ let lists = {
 let currentList = 1;
 console.log(lists[currentList]);
 let newKey = 3;
+let itemInputSection = document.getElementById("item-input-section");
+let itemButton = document.getElementById("add-item-button");
+let itemInput = document.getElementById("item-input");
+let itemSubmit = document.getElementById("item-submit");
 
 document.getElementById("list-name-input").value = "";
 
@@ -67,6 +71,8 @@ function addList() {
             };
 
             currentList = newKey;
+
+            document.getElementById("list-name-input").value = "";
             render();
         } else {
             console.log("name must be unique");
@@ -104,7 +110,27 @@ function switchLists(e) {
     };
 };
 
+function toggleItemInput() {
+    itemButton.classList.toggle("hidden");
+    itemInputSection.classList.toggle("hidden");
+    itemInputSection.classList.toggle("flex");
+};
+
+function addItem() {
+    if (itemInput.value) {
+        let todosList = lists[currentList].todos;
+        todosList.push({text: itemInput.value, completed: false});
+        itemInput.value = "";
+        
+        toggleItemInput();
+        render();
+    };
+};
+
 window.addEventListener("load", render);
 
 document.getElementById("list-submit").addEventListener("click", addList);
 document.getElementById("delete-button").addEventListener("click", deleteList);
+
+itemButton.addEventListener("click", toggleItemInput);
+itemSubmit.addEventListener("click", addItem);
