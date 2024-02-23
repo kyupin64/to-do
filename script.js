@@ -27,6 +27,7 @@ let lists = {
 };
 let currentList = 1;
 console.log(lists[currentList]);
+let newKey = 3;
 
 document.getElementById("list-name-input").value = "";
 
@@ -47,19 +48,32 @@ function render() {
     });
 
     document.getElementById("current-list-items").innerHTML = todosHtml;
+    
+    let listButtons = document.querySelectorAll(".list-group-item");
+    listButtons.forEach((button) => button.addEventListener("click", switchLists));
 };
 
 function addList() { 
     let inputListName = document.getElementById("list-name-input").value;
-    let newKey = Object.keys(lists).length + 1;
 
     if (inputListName) {
-        lists[newKey] = {
-            name: `${inputListName}`,
-            todos: []
+        let listObjs = Object.values(lists);
+        let findDoubles = listObjs.filter((obj) => obj.name === inputListName).length;
+        if (findDoubles === 0) {
+            newKey += 1;
+            lists[newKey] = {
+                name: `${inputListName}`,
+                todos: []
+            };
+
+            currentList = newKey;
+            render();
+        } else {
+            console.log("name must be unique");
         };
+    } else {
+        console.log("please enter a name");
     };
-    render();
 };
 
 function deleteList() {
@@ -75,6 +89,20 @@ function deleteList() {
     }
     
 }
+
+function switchLists(e) {
+    let currentButton = e.target;
+    let listsArr = Object.keys(lists);
+
+    for (i = 0; i < listsArr.length; i++) {
+        let listKey = listsArr[i];
+        if (lists[listKey].name === currentButton.innerHTML) {
+            currentList = listKey;
+            render();
+            break;
+        };
+    };
+};
 
 window.addEventListener("load", render);
 
