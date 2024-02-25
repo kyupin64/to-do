@@ -87,6 +87,10 @@ function render() {
     let editButtons = document.querySelectorAll(".current-list-item button:nth-last-child(2)");
     editButtons.forEach((button) => button.addEventListener("click", editItem));
 
+    // for each trash can icon, add event to delete whichever todo item was clicked
+    let deleteButtons = document.querySelectorAll(".current-list-item button:last-child");
+    deleteButtons.forEach((button) => button.addEventListener("click", deleteItem));
+
     saveThings();
 };
 
@@ -255,6 +259,20 @@ function editItem(e) {
         // if there is another item being edited, console log why the edit button didn't work
         console.log("finish editing item before trying to edit a new one");
     };
+};
+
+function deleteItem(e) {
+    // get button that was clicked and its second previous sibling's content (p element with todo text)
+    let currentButton = e.currentTarget;
+    let pContent = currentButton.previousElementSibling.previousElementSibling.innerHTML;
+    
+    // use map function to get the text of each todo, then use indexOf to get the index of the todo item with the
+    // same text content as the text of the item to be deleted
+    let todoIndex = lists[currentList].todos.map(e => e.text).indexOf(pContent);
+    // get array of current todos, splice to remove index of item to be deleted, render
+    let currentTodosArr = lists[currentList].todos;
+    currentTodosArr.splice(todoIndex, 1);
+    render();
 };
 
 // on page load, render everything with the retrieved local storage lists object, currentList, etc
