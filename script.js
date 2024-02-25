@@ -48,7 +48,7 @@ function render() {
 
     let todosHtml = "";
     lists[currentList].todos.forEach(item => {
-        todosHtml += `<div class="current-list-item"><button><i class="fa-regular fa-square"></i></button><p>${item.text}</p></div>`
+        todosHtml += `<div class="current-list-item"><button><i class="fa-regular fa-square"></i></button><p>${item.text}</p><button><i class="fa-solid fa-pencil"></i></button><button><i class="fa-solid fa-trash-can"></i></button></div>`
     });
 
     document.getElementById("current-list-items").innerHTML = todosHtml;
@@ -56,8 +56,11 @@ function render() {
     let listButtons = document.querySelectorAll(".list-group-item");
     listButtons.forEach((button) => button.addEventListener("click", switchLists));
 
-    let itemButtons = document.querySelectorAll(".current-list-item button");
-    itemButtons.forEach((button) => button.addEventListener("click", checkItem));
+    let checkboxButtons = document.querySelectorAll(".current-list-item button:first-child");
+    checkboxButtons.forEach((button) => button.addEventListener("click", checkItem));
+
+    let editButtons = document.querySelectorAll(".current-list-item button:nth-last-child(2)");
+    editButtons.forEach((button) => button.addEventListener("click", editItem));
 };
 
 function addList() { 
@@ -138,6 +141,38 @@ function checkItem(e) {
     icon.classList.toggle("fa-square");
     icon.classList.toggle("fa-square-check");
     text.classList.toggle("line-through");
+};
+
+function editItem(e) {
+    let inputs = document.querySelector("#current-list-items input");
+    if (!inputs) {
+        let currentButton = e.currentTarget;
+        let parent = currentButton.parentElement;
+        let pElem = currentButton.previousElementSibling;
+        let pContent = pElem.innerHTML;
+
+        parent.parentElement.insertBefore(document.createElement("div"), parent);
+        let editDiv = parent.previousElementSibling;
+
+        editDiv.appendChild(document.createElement("input"));
+        editDiv.appendChild(document.createElement("button"));
+        let inputAndButton = editDiv.childNodes;
+        let editInput = inputAndButton[0];
+        let editSubmit = inputAndButton[1];
+
+        parent.classList.toggle("!hidden");
+        editDiv.classList.add("flex", "gap-2", "max-w-56")
+        editInput.classList.add("p-2", "border-2", "border-slate-500", "w-36", "h-9");
+        editInput.value = pContent;
+        editSubmit.classList.add("border-2", "border-slate-500", "w-24", "h-9");
+        editSubmit.innerHTML = "Submit"
+
+        editSubmit.addEventListener("click", () => {
+            let todoIndex = lists[currentList].todos.map(function(e) { return e.text; }).indexOf(pContent);
+            lists[currentList].todos[todoIndex].text = editInput.value;
+            render();
+        });
+    };
 };
 
 window.addEventListener("load", render);
