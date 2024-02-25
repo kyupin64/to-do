@@ -35,6 +35,18 @@ let itemSubmit = document.getElementById("item-submit");
 
 document.getElementById("list-name-input").value = "";
 
+function restoreSave() {
+    lists = JSON.parse(localStorage.getItem("lists"));
+    currentList = JSON.parse(localStorage.getItem("currentList"));
+};
+
+function saveThings() {
+    localStorage.setItem("lists", JSON.stringify(lists));
+    localStorage.setItem("currentList", JSON.stringify(currentList));
+};
+
+restoreSave();
+
 function render() {
     let listsHtml = "";
     Object.keys(lists).forEach(key => {
@@ -48,7 +60,12 @@ function render() {
 
     let todosHtml = "";
     lists[currentList].todos.forEach(item => {
-        todosHtml += `<div class="current-list-item"><button><i class="fa-regular fa-square"></i></button><p>${item.text}</p><button><i class="fa-solid fa-pencil"></i></button><button><i class="fa-solid fa-trash-can"></i></button></div>`
+        console.log(item.completed)
+        if (item.completed) {
+            todosHtml += `<div class="current-list-item"><button><i class="fa-regular fa-square-check"></i></button><p class="line-through">${item.text}</p><button><i class="fa-solid fa-pencil"></i></button><button><i class="fa-solid fa-trash-can"></i></button></div>`
+        } else {
+            todosHtml += `<div class="current-list-item"><button><i class="fa-regular fa-square"></i></button><p>${item.text}</p><button><i class="fa-solid fa-pencil"></i></button><button><i class="fa-solid fa-trash-can"></i></button></div>`
+        };
     });
 
     document.getElementById("current-list-items").innerHTML = todosHtml;
@@ -61,6 +78,8 @@ function render() {
 
     let editButtons = document.querySelectorAll(".current-list-item button:nth-last-child(2)");
     editButtons.forEach((button) => button.addEventListener("click", editItem));
+
+    saveThings();
 };
 
 function addList() { 
@@ -138,9 +157,22 @@ function checkItem(e) {
     let icon = currentButton.querySelector("i");
     let text = currentButton.nextElementSibling;
     
-    icon.classList.toggle("fa-square");
     icon.classList.toggle("fa-square-check");
-    text.classList.toggle("line-through");
+
+    Object.keys(lists).forEach(key => {
+        let listTodos = lists[key].todos;
+        for (i = 0; i < listTodos.length; i++) {
+            todoText = listTodos[i].text;
+            if (text.innerHTML === todoText) {
+                if (icon.classList.contains("fa-square-check")) {
+                    listTodos[i].completed = true;
+                } else {
+                    listTodos[i].completed = false;
+                };
+            };
+        };
+    });
+    render();
 };
 
 function editItem(e) {
