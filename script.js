@@ -54,7 +54,7 @@ function render() {
     Object.keys(lists).forEach(key => {
         // loop through each list and add to html element
         listName = lists[key].name;
-        listsHtml += `<button class="list-group-item border-b-2 border-slate-500 bg-slate-50 w-100 p-2">${listName}</button>`
+        listsHtml += `<button class="list-group-item border-b-2 border-slate-500 bg-slate-50 w-100 p-2 hover:text-slate-50 hover:border-green-700 hover:bg-green-700">${listName}</button>`
     });
     document.getElementById("list-group").innerHTML = listsHtml;
 
@@ -66,10 +66,10 @@ function render() {
         // loop through each todo in current list, add to html element
         if (item.completed) {
             // if todo is marked as completed, add checkbox and strikethrough on text
-            todosHtml += `<div class="current-list-item"><button><i class="fa-regular fa-square-check"></i></button><p class="line-through">${item.text}</p><button><i class="fa-solid fa-pencil"></i></button><button><i class="fa-solid fa-trash-can"></i></button></div>`
+            todosHtml += `<div class="current-list-item"><button><i class="fa-regular fa-square-check hover:text-green-700"></i></button><p class="line-through">${item.text}</p><button><i class="fa-solid fa-pencil hover:text-green-700"></i></button><button><i class="fa-solid fa-trash-can hover:text-green-700"></i></button></div>`
         } else {
             // if not completed, add regular box and text
-            todosHtml += `<div class="current-list-item"><button><i class="fa-regular fa-square"></i></button><p>${item.text}</p><button><i class="fa-solid fa-pencil"></i></button><button><i class="fa-solid fa-trash-can"></i></button></div>`
+            todosHtml += `<div class="current-list-item"><button><i class="fa-regular fa-square hover:text-green-700"></i></button><p>${item.text}</p><button><i class="fa-solid fa-pencil hover:text-green-700"></i></button><button><i class="fa-solid fa-trash-can hover:text-green-700"></i></button></div>`
         };
     });
     document.getElementById("current-list-items").innerHTML = todosHtml;
@@ -238,11 +238,11 @@ function editItem(e) {
 
         // hide the parent element which contains all the icons and text and add styles for the new edit div, input, and submit button
         parent.classList.toggle("!hidden");
-        editDiv.classList.add("flex", "gap-2", "max-w-56")
-        editInput.classList.add("p-2", "border-2", "border-slate-500", "w-36", "h-9");
+        editDiv.classList.add("flex", "gap-2", "max-w-full")
+        editInput.classList.add("p-2", "border-2", "border-slate-500", "w-36", "sm:w-72", "h-9");
         // make the value of the input field the same as the text of the todo item to be edited
         editInput.value = pContent;
-        editSubmit.classList.add("border-2", "border-slate-500", "w-24", "h-9");
+        editSubmit.classList.add("border-2", "border-slate-500", "w-24", "h-9", "hover:text-slate-50", "hover:border-green-700", "hover:bg-green-700");
         // make submit button contain the word "submit"
         editSubmit.innerHTML = "Submit"
 
