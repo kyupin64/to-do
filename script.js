@@ -307,6 +307,19 @@ function editListName() {
     };
 };
 
+function clearCompletedItems() {
+    // get array of current list todos
+    let currentTodos = lists[currentList].todos;
+    //loop through each todo to remove the ones marked as completed, then render
+    for (i = 0; i < currentTodos.length; i++) {
+        // check if current todo is completed, if it is then splice the array to remove the todo
+        if (currentTodos[i].completed) {
+            currentTodos.splice(i, 1);
+        };
+    };
+    render();
+};
+
 // on page load, render everything with the retrieved local storage lists object, currentList, etc
 window.addEventListener("load", () => {
     // reset value of input for adding new lists to list of lists
@@ -316,10 +329,11 @@ window.addEventListener("load", () => {
     render();
 });
 
-// add events for the list name submit button, list delete button, and list name edit button
+// add events for the list name submit button, list delete button, list name edit button, and clear completed items button
 document.getElementById("list-submit").addEventListener("click", addList);
 document.getElementById("delete-button").addEventListener("click", deleteList);
 document.getElementById("edit-button").addEventListener("click", editListName);
+document.getElementById("clear-button").addEventListener("click", clearCompletedItems);
 
 // add events for clicking the add item button and the submit button after adding an item
 itemButton.addEventListener("click", toggleItemInput);
