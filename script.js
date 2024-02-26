@@ -320,12 +320,21 @@ function editListName() {
 function clearCompletedItems() {
     // get array of current list todos
     let currentTodos = lists[currentList].todos;
-    //loop through each todo to remove the ones marked as completed, then render
+    let indexes = [];
+
+    //loop through each todo to check if they're completed
     for (i = 0; i < currentTodos.length; i++) {
-        // check if current todo is completed, if it is then splice the array to remove the todo
+        // check if current todo is completed, if it is then add the index to indexes array
         if (currentTodos[i].completed) {
-            currentTodos.splice(i, 1);
+            indexes.push(i);
         };
+    };
+    
+    // loop through indexes of completed todos, starting at the highest and incrementing down, so when it splices it doesn't
+    // mess with other todo indexes, then render
+    for (i = indexes.length - 1; i >= 0; i--) {
+        // splice current todo array to remove each todo
+        currentTodos.splice(indexes[i], 1);
     };
     render();
 };
