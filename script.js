@@ -275,7 +275,7 @@ function deleteItem(e) {
     // get button that was clicked and its second previous sibling's content (p element with todo text)
     let currentButton = e.currentTarget;
     let pContent = currentButton.previousElementSibling.previousElementSibling.innerHTML;
-    
+
     // use map function to get the text of each todo, then use indexOf to get the index of the todo item with the
     // same text content as the text of the item to be deleted
     let todoIndex = lists[currentList].todos.map(e => e.text).indexOf(pContent);
@@ -335,7 +335,10 @@ window.addEventListener("load", () => {
     // reset value of input for adding new lists to list of lists
     document.getElementById("list-name-input").value = "";
 
-    restoreSave();
+    // check if localStorage has been set yet, if it has then retrieve it
+    if (localStorage.getItem("lists") !== null) {
+        restoreSave();
+    };
     // call initialRender function to only show list name input section if there are no lists saved in localStorage
     initialRender();
 });
