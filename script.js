@@ -1,38 +1,17 @@
 // set variable for list of lists object
-let lists = {
-    1: {
-        name: "Schoolwork",
-        todos: [
-            {
-                text: "Work on to-do project",
-                completed: false
-            },
-            {
-                text: "Study iterators",
-                completed: false
-            },
-        ]
-    },
-    2: {
-        name: "Chores",
-        todos: [
-
-        ]
-    },
-    3: {
-        name: "Date Ideas",
-        todos: [
-            
-        ]
-    }
-};
-// set variables for currentlist, key of next list to be added (newKey), and elements on page for adding new item to todo list
+let lists = {};
+// set variables for currentlist and key of next list to be added (newKey)
 let currentList = 1;
 let newKey = 3;
+// set variables for elements on page for adding new item to todo list
 let itemInputSection = document.getElementById("item-input-section");
 let itemButton = document.getElementById("add-item-button");
 let itemInput = document.getElementById("item-input");
 let itemSubmit = document.getElementById("item-submit");
+// set variables for current list section, left list of lists section, and list suggestion section
+let currentListSection = document.getElementById("current-list");
+let leftList = document.getElementById("left-list");
+let listsSuggest = document.getElementById("list-suggest");
 
 // function to retrieve saved localStorage lists object, currentList value, and newKey value, called when the page is loaded
 function restoreSave() {
@@ -46,6 +25,36 @@ function saveThings() {
     localStorage.setItem("lists", JSON.stringify(lists));
     localStorage.setItem("currentList", JSON.stringify(currentList));
     localStorage.setItem("newKey", JSON.stringify(newKey));
+};
+
+function toggleCurrentList() {
+    // toggle hidden on current list section
+    currentListSection.classList.toggle("hidden");
+    // toggle widths of left list of lists so it will take up entire screen instead of only being on the left
+    leftList.classList.toggle("w-dvw");
+    leftList.classList.toggle("sm:w-1/4");
+    leftList.classList.toggle("lg:w-1/5");
+    // toggle list suggestions to only show when there are no lists
+    listsSuggest.classList.toggle("hidden");
+    listsSuggest.classList.toggle("flex");
+};
+
+// function to only display list name input section unless there are lists already in the lists object, then renders page normally
+function initialRender() {
+    // check if there are lists in lists object and if there are, render page normally, if not, only render list name input
+    if (Object.keys(lists).length >= 1) {
+        // if the current list is already hidden, call toggle function to make it visible, otherwise just render
+        if (currentListSection.classList.contains("hidden")) {
+            toggleCurrentList();
+            render();
+        } else {
+            render();
+        };
+    } else {
+        // if lists object is empty, hide current list section and reset list names section
+        toggleCurrentList();
+        document.getElementById("list-group").innerHTML = "";
+    };
 };
 
 function render() {
@@ -66,10 +75,10 @@ function render() {
         // loop through each todo in current list, add to html element
         if (item.completed) {
             // if todo is marked as completed, add checkbox and strikethrough on text
-            todosHtml += `<div class="current-list-item"><button><i class="fa-regular fa-square-check hover:text-green-700"></i></button><p class="line-through">${item.text}</p><button><i class="fa-solid fa-pencil hover:text-green-700"></i></button><button><i class="fa-solid fa-trash-can hover:text-green-700"></i></button></div>`
+            todosHtml += `<div class="current-list-item"><button><i class="fa-regular fa-square-check hover:text-green-700"></i></button><p class="line-through">${item.text}</p><button><i class="fa-solid fa-pencil hover:text-green-700"></i></button><button><i class="fa-solid fa-trash-can hover:text-red-700"></i></button></div>`
         } else {
             // if not completed, add regular box and text
-            todosHtml += `<div class="current-list-item"><button><i class="fa-regular fa-square hover:text-green-700"></i></button><p>${item.text}</p><button><i class="fa-solid fa-pencil hover:text-green-700"></i></button><button><i class="fa-solid fa-trash-can hover:text-green-700"></i></button></div>`
+            todosHtml += `<div class="current-list-item"><button><i class="fa-regular fa-square hover:text-green-700"></i></button><p>${item.text}</p><button><i class="fa-solid fa-pencil hover:text-green-700"></i></button><button><i class="fa-solid fa-trash-can hover:text-red-700"></i></button></div>`
         };
     });
     document.getElementById("current-list-items").innerHTML = todosHtml;
@@ -113,9 +122,9 @@ function addList() {
             // switch currentList to whichever list was just created
             currentList = newKey;
 
-            // reset input field text and render new list
+            // reset input field text and call initialRender function to make current list visible
             document.getElementById("list-name-input").value = "";
-            render();
+            initialRender();
         } else {
             // if there is already a list with that name, console log why the submit button didn't work
             console.log("name must be unique");
@@ -134,11 +143,12 @@ function deleteList() {
         currentList = Number(Object.keys(lists)[0]);
         render();
     } else {
-        // if there is only one list left, delete that list and set all fields to be blank
+        // if there is only one list left, delete that list
         delete lists[currentList];
-        document.getElementById("list-group").innerHTML = "";
-        document.getElementById("current-list-name").innerHTML = "";
-        document.getElementById("current-list-items").innerHTML = "";
+        // call save function to store empty lists object
+        saveThings();
+        // call initialRender function to display the page with no lists
+        initialRender();
     };
 };
 
@@ -326,7 +336,8 @@ window.addEventListener("load", () => {
     document.getElementById("list-name-input").value = "";
 
     restoreSave();
-    render();
+    // call initialRender function to only show list name input section if there are no lists saved in localStorage
+    initialRender();
 });
 
 // add events for the list name submit button, list delete button, list name edit button, and clear completed items button
