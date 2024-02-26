@@ -275,6 +275,38 @@ function deleteItem(e) {
     render();
 };
 
+function editListName() {
+    // get edit list name section, if it contains hidden then make it show and allow user to edit, if it doesn't
+    // that means it's already visible and user is already editing, so do nothing
+    let editSection = document.getElementById("listname-edit");
+    if (editSection.classList.contains("hidden")) {
+        // if edit section is hidden, get current list name element, edit input element, and submit button element
+        let titleElement = document.getElementById("current-list-name");
+        let listNameInput = document.getElementById("listname-edit-input");
+        let listNameSubmit = document.getElementById("listname-edit-submit");
+
+        // hide the list name and show the input field and button
+        titleElement.classList.add("hidden");
+        editSection.classList.remove("hidden");
+        editSection.classList.add("flex");
+        // make the value of the input field the same as the text of the list name to be edited
+        listNameInput.value = titleElement.innerHTML;
+
+        // add event to submit button and when clicked, change the name of the current list in the lists object
+        listNameSubmit.addEventListener("click", () => {
+            lists[currentList].name = listNameInput.value;
+            //hide the edit section and show the list name, then render new list name
+            titleElement.classList.remove("hidden");
+            editSection.classList.add("hidden");
+            editSection.classList.remove("flex");
+            render();
+        });
+    } else {
+        // if edit section is visible, console log why the edit button didn't work
+        console.log("already editing!");
+    };
+};
+
 // on page load, render everything with the retrieved local storage lists object, currentList, etc
 window.addEventListener("load", () => {
     // reset value of input for adding new lists to list of lists
@@ -284,9 +316,10 @@ window.addEventListener("load", () => {
     render();
 });
 
-// add events for the list name submit button and list delete button
+// add events for the list name submit button, list delete button, and list name edit button
 document.getElementById("list-submit").addEventListener("click", addList);
 document.getElementById("delete-button").addEventListener("click", deleteList);
+document.getElementById("edit-button").addEventListener("click", editListName);
 
 // add events for clicking the add item button and the submit button after adding an item
 itemButton.addEventListener("click", toggleItemInput);
