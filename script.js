@@ -136,20 +136,32 @@ function addList() {
 };
 
 function deleteList() {
-    // check how many keys are in lists, if greater than one delete the list that was clicked
-    if (Object.keys(lists).length > 1) {
-        delete lists[currentList];
-        // set currentList to the key number of the list at the top and render
-        currentList = Number(Object.keys(lists)[0]);
-        render();
-    } else {
-        // if there is only one list left, delete that list
-        delete lists[currentList];
-        // call save function to store empty lists object
-        saveThings();
-        // call initialRender function to display the page with no lists
-        initialRender();
-    };
+    document.querySelector("#confirm-delete p").innerHTML = `Are you sure you want to delete item "${lists[currentList].name}"?`
+    document.getElementById("buttons-container").innerHTML = `<button class="px-2 border-2 border-green-500 hover:text-slate-50 hover:bg-green-500">Yes, delete</button>
+    <button class="px-2 border-2 border-red-500 hover:text-slate-50 hover:bg-red-500">No, go back</button>`
+    toggleConfirmDelete();
+    document.querySelector("#buttons-container button:first-child").addEventListener("click", () => {
+        // check how many keys are in lists, if greater than one delete the list that was clicked
+        if (Object.keys(lists).length > 1) {
+            delete lists[currentList];
+            // set currentList to the key number of the list at the top and render
+            currentList = Number(Object.keys(lists)[0]);
+            toggleConfirmDelete();
+            render();
+        } else {
+            // if there is only one list left, delete that list
+            delete lists[currentList];
+            // call save function to store empty lists object
+            saveThings();
+            // call initialRender function to display the page with no lists
+            toggleConfirmDelete();
+            initialRender();
+        };
+    });
+    
+    document.querySelector("#buttons-container button:last-child").addEventListener("click", () => {
+        toggleConfirmDelete();
+    });
 };
 
 function switchLists(e) {
