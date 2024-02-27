@@ -8,7 +8,20 @@
     <script src="https://kit.fontawesome.com/edbfca546f.js" crossorigin="anonymous"></script>
     <script defer src="script.js"></script>
 </head>
-<body>
+<body class="relative">
+
+    <!-- "deletion confirmation box" -->
+    <div id="confirm-delete" class="absolute top-40 w-full justify-center z-20 hidden">
+        <div class="p-3 w-72 flex flex-col items-center gap-3 bg-slate-50 border-4 border-red-500">
+            <p class="text-center"></p>
+            <div id="buttons-container" class="flex gap-10 justify-center"></div>
+        </div>
+    </div>
+    <!-- background for delete confirmation box -->
+    <div id="bg-div" class="absolute h-full w-full bg-slate-700 opacity-70 z-10 hidden"></div>
+
+
+    <!-- content -->
     <div class="flex flex-col h-dvh">
 
         <!-- top nav bar -->
@@ -29,7 +42,7 @@
                     <button id="list-submit" class="bg-slate-50 border-b-2 border-slate-500 w-24 self-center hover:text-slate-50 hover:border-green-700 hover:bg-green-700">Submit</button>
                 </div>
                 <div id="list-suggest" class="py-10 px-5 hidden flex-col gap-3 bg-slate-50 border-b-2 border-slate-500 items-center">
-                    <h2 class="text-xl pb-5">No lists yet - try creating a list by entering a name into the input box above!</h2>
+                    <h2 class="text-xl pb-5 text-center">No lists yet - try creating a list by entering a name into the input box above!</h2>
                     <p class="text-lg">Here are some list ideas:</p>
                     <ul class="list-disc">
                         <li>Shopping list</li>

@@ -276,13 +276,25 @@ function deleteItem(e) {
     let currentButton = e.currentTarget;
     let pContent = currentButton.previousElementSibling.previousElementSibling.innerHTML;
 
-    // use map function to get the text of each todo, then use indexOf to get the index of the todo item with the
-    // same text content as the text of the item to be deleted
-    let todoIndex = lists[currentList].todos.map(e => e.text).indexOf(pContent);
-    // get array of current todos, splice to remove index of item to be deleted, render
-    let currentTodosArr = lists[currentList].todos;
-    currentTodosArr.splice(todoIndex, 1);
-    render();
+    document.querySelector("#confirm-delete p").innerHTML = `Are you sure you want to delete item "${pContent}"?`
+    document.getElementById("buttons-container").innerHTML = `<button class="px-2 border-2 border-green-500 hover:text-slate-50 hover:bg-green-500">Yes, delete</button>
+    <button class="px-2 border-2 border-red-500 hover:text-slate-50 hover:bg-red-500">No, go back</button>`
+    toggleConfirmDelete();
+    document.querySelector("#buttons-container button:first-child").addEventListener("click", () => {
+        // use map function to get the text of each todo, then use indexOf to get the index of the todo item with the
+        // same text content as the text of the item to be deleted
+        let todoIndex = lists[currentList].todos.map(e => e.text).indexOf(pContent);
+        // get array of current todos, splice to remove index of item to be deleted, render
+        let currentTodosArr = lists[currentList].todos;
+        currentTodosArr.splice(todoIndex, 1);
+        
+        toggleConfirmDelete();
+        render();
+    });
+    
+    document.querySelector("#buttons-container button:last-child").addEventListener("click", () => {
+        toggleConfirmDelete();
+    });
 };
 
 function editListName() {
@@ -329,7 +341,7 @@ function clearCompletedItems() {
             indexes.push(i);
         };
     };
-    
+
     // loop through indexes of completed todos, starting at the highest and incrementing down, so when it splices it doesn't
     // mess with other todo indexes, then render
     for (i = indexes.length - 1; i >= 0; i--) {
@@ -337,6 +349,13 @@ function clearCompletedItems() {
         currentTodos.splice(indexes[i], 1);
     };
     render();
+};
+
+function toggleConfirmDelete() {
+    
+    document.getElementById("confirm-delete").classList.toggle("hidden");
+    document.getElementById("confirm-delete").classList.toggle("flex");
+    document.getElementById("bg-div").classList.toggle("hidden");
 };
 
 // on page load, render everything with the retrieved local storage lists object, currentList, etc
