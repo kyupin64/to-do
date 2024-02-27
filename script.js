@@ -136,16 +136,23 @@ function addList() {
 };
 
 function deleteList() {
-    document.querySelector("#confirm-delete p").innerHTML = `Are you sure you want to delete list "${lists[currentList].name}"?`
+    // write text to deletion confirmation message
+    document.querySelector("#confirm-delete p").innerHTML = `Are you sure you want to delete list "${lists[currentList].name}"?`;
+    // make "Yes, delete" and "No, go back" buttons in deletion confirmation popup
     document.getElementById("buttons-container").innerHTML = `<button class="px-2 border-2 border-green-500 hover:text-slate-50 hover:bg-green-500">Yes, delete</button>
-    <button class="px-2 border-2 border-red-500 hover:text-slate-50 hover:bg-red-500">No, go back</button>`
+    <button class="px-2 border-2 border-red-500 hover:text-slate-50 hover:bg-red-500">No, go back</button>`;
+    // show deletion confirmation box and background to grey out the rest of the page
     toggleConfirmDelete();
+
+    // add event to "Yes" button, when clicked execute deletion of current list
     document.querySelector("#buttons-container button:first-child").addEventListener("click", () => {
         // check how many keys are in lists, if greater than one delete the list that was clicked
         if (Object.keys(lists).length > 1) {
             delete lists[currentList];
-            // set currentList to the key number of the list at the top and render
+            // set currentList to the key number of the list at the top
             currentList = Number(Object.keys(lists)[0]);
+
+            // hide confirmation deletion box and render page normally with the deleted list removed
             toggleConfirmDelete();
             render();
         } else {
@@ -153,12 +160,14 @@ function deleteList() {
             delete lists[currentList];
             // call save function to store empty lists object
             saveThings();
-            // call initialRender function to display the page with no lists
+            
+            // hide confirmation deletion box and call initialRender function to display the page with no lists
             toggleConfirmDelete();
             initialRender();
         };
     });
     
+    // add event to "No" button to hide deletion confirmation box
     document.querySelector("#buttons-container button:last-child").addEventListener("click", () => {
         toggleConfirmDelete();
     });
@@ -288,22 +297,29 @@ function deleteItem(e) {
     let currentButton = e.currentTarget;
     let pContent = currentButton.previousElementSibling.previousElementSibling.innerHTML;
 
-    document.querySelector("#confirm-delete p").innerHTML = `Are you sure you want to delete item "${pContent}"?`
+    // write text to deletion confirmation message
+    document.querySelector("#confirm-delete p").innerHTML = `Are you sure you want to delete item "${pContent}"?`;
+    // make "Yes, delete" and "No, go back" buttons in deletion confirmation popup
     document.getElementById("buttons-container").innerHTML = `<button class="px-2 border-2 border-green-500 hover:text-slate-50 hover:bg-green-500">Yes, delete</button>
-    <button class="px-2 border-2 border-red-500 hover:text-slate-50 hover:bg-red-500">No, go back</button>`
+    <button class="px-2 border-2 border-red-500 hover:text-slate-50 hover:bg-red-500">No, go back</button>`;
+    // show deletion confirmation box and background to grey out the rest of the page
     toggleConfirmDelete();
+
+    // add event to "Yes" button, when clicked execute deletion of item
     document.querySelector("#buttons-container button:first-child").addEventListener("click", () => {
         // use map function to get the text of each todo, then use indexOf to get the index of the todo item with the
         // same text content as the text of the item to be deleted
         let todoIndex = lists[currentList].todos.map(e => e.text).indexOf(pContent);
-        // get array of current todos, splice to remove index of item to be deleted, render
+        // get array of current todos, splice to remove index of item to be deleted
         let currentTodosArr = lists[currentList].todos;
         currentTodosArr.splice(todoIndex, 1);
         
+        // hide confirmation deletion box and render page normally with the deleted item removed
         toggleConfirmDelete();
         render();
     });
     
+    // add event to "No" button to hide deletion confirmation box
     document.querySelector("#buttons-container button:last-child").addEventListener("click", () => {
         toggleConfirmDelete();
     });
@@ -342,10 +358,15 @@ function editListName() {
 };
 
 function clearCompletedItems() {
-    document.querySelector("#confirm-delete p").innerHTML = `Are you sure you want to delete all completed items?`
+    // write text to deletion confirmation message
+    document.querySelector("#confirm-delete p").innerHTML = `Are you sure you want to delete all completed items?`;
+    // make "Yes, delete" and "No, go back" buttons in deletion confirmation popup
     document.getElementById("buttons-container").innerHTML = `<button class="px-2 border-2 border-green-500 hover:text-slate-50 hover:bg-green-500">Yes, delete</button>
-    <button class="px-2 border-2 border-red-500 hover:text-slate-50 hover:bg-red-500">No, go back</button>`
+    <button class="px-2 border-2 border-red-500 hover:text-slate-50 hover:bg-red-500">No, go back</button>`;
+    // show deletion confirmation box and background to grey out the rest of the page
     toggleConfirmDelete();
+
+    // add event to "Yes" button, when clicked execute deletion of completed items
     document.querySelector("#buttons-container button:first-child").addEventListener("click", () => {
         // get array of current list todos
         let currentTodos = lists[currentList].todos;
@@ -360,23 +381,25 @@ function clearCompletedItems() {
         };
 
         // loop through indexes of completed todos, starting at the highest and incrementing down, so when it splices it doesn't
-        // mess with other todo indexes, then render
+        // mess with other todo indexes
         for (i = indexes.length - 1; i >= 0; i--) {
             // splice current todo array to remove each todo
             currentTodos.splice(indexes[i], 1);
         };
         
+        // hide confirmation deletion box and render page normally with the completed items removed
         toggleConfirmDelete();
         render();
     });
     
+    // add event to "No" button to hide deletion confirmation box
     document.querySelector("#buttons-container button:last-child").addEventListener("click", () => {
         toggleConfirmDelete();
     });
 };
 
+// function to show or hide deletion confirmation box and div that greys out the rest of the page
 function toggleConfirmDelete() {
-    
     document.getElementById("confirm-delete").classList.toggle("hidden");
     document.getElementById("confirm-delete").classList.toggle("flex");
     document.getElementById("bg-div").classList.toggle("hidden");
