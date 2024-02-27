@@ -136,7 +136,7 @@ function addList() {
 };
 
 function deleteList() {
-    document.querySelector("#confirm-delete p").innerHTML = `Are you sure you want to delete item "${lists[currentList].name}"?`
+    document.querySelector("#confirm-delete p").innerHTML = `Are you sure you want to delete list "${lists[currentList].name}"?`
     document.getElementById("buttons-container").innerHTML = `<button class="px-2 border-2 border-green-500 hover:text-slate-50 hover:bg-green-500">Yes, delete</button>
     <button class="px-2 border-2 border-red-500 hover:text-slate-50 hover:bg-red-500">No, go back</button>`
     toggleConfirmDelete();
@@ -342,25 +342,37 @@ function editListName() {
 };
 
 function clearCompletedItems() {
-    // get array of current list todos
-    let currentTodos = lists[currentList].todos;
-    let indexes = [];
+    document.querySelector("#confirm-delete p").innerHTML = `Are you sure you want to delete all completed items?`
+    document.getElementById("buttons-container").innerHTML = `<button class="px-2 border-2 border-green-500 hover:text-slate-50 hover:bg-green-500">Yes, delete</button>
+    <button class="px-2 border-2 border-red-500 hover:text-slate-50 hover:bg-red-500">No, go back</button>`
+    toggleConfirmDelete();
+    document.querySelector("#buttons-container button:first-child").addEventListener("click", () => {
+        // get array of current list todos
+        let currentTodos = lists[currentList].todos;
+        let indexes = [];
 
-    //loop through each todo to check if they're completed
-    for (i = 0; i < currentTodos.length; i++) {
-        // check if current todo is completed, if it is then add the index to indexes array
-        if (currentTodos[i].completed) {
-            indexes.push(i);
+        //loop through each todo to check if they're completed
+        for (i = 0; i < currentTodos.length; i++) {
+            // check if current todo is completed, if it is then add the index to indexes array
+            if (currentTodos[i].completed) {
+                indexes.push(i);
+            };
         };
-    };
 
-    // loop through indexes of completed todos, starting at the highest and incrementing down, so when it splices it doesn't
-    // mess with other todo indexes, then render
-    for (i = indexes.length - 1; i >= 0; i--) {
-        // splice current todo array to remove each todo
-        currentTodos.splice(indexes[i], 1);
-    };
-    render();
+        // loop through indexes of completed todos, starting at the highest and incrementing down, so when it splices it doesn't
+        // mess with other todo indexes, then render
+        for (i = indexes.length - 1; i >= 0; i--) {
+            // splice current todo array to remove each todo
+            currentTodos.splice(indexes[i], 1);
+        };
+        
+        toggleConfirmDelete();
+        render();
+    });
+    
+    document.querySelector("#buttons-container button:last-child").addEventListener("click", () => {
+        toggleConfirmDelete();
+    });
 };
 
 function toggleConfirmDelete() {
