@@ -1,5 +1,9 @@
 # to-do
 
+GitHub Pages: https://kyupin64.github.io/to-do/
+
+Git Log: [log.txt](log.txt)
+
 When you first open the page, add a new list by typing a name into the input field at the top of the page, then click the "Submit" button. There are some list suggestions under the input that may give you some ideas. Once you have at least one list, the list input box switches to the left side of the screen and under it is a clickable list of each list you've added.
 
 Add list items by clicking the "+" button under the list title in the main portion of the screen. Enter a to-do item in the input and click "Submit" to add it to your list. To the left of the new list item is a checkbox which you can click to mark the item as completed. You can also unmark it by clicking the box again. Click the pencil icon to the right of the to-do item to edit the text of the item and then click "Submit" to apply the change. Click the trashcan icon to the rght of the pencil icon to delete the list item. It will pull up a confirmation popup, press the "Yes, delete" button to delete the item and the "No, go back" button to keep the item and make the popup go away.
